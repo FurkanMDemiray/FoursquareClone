@@ -87,6 +87,7 @@
                     <connections>
                         <outlet property="tableView" destination="10L-3u-RV3" id="kaZ-s2-p9Q"/>
                         <segue destination="Ei9-Eu-INI" kind="presentation" identifier="toAddPlaceVC" modalPresentationStyle="fullScreen" id="cNE-yd-sJl"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" identifier="toSignUpVC" modalPresentationStyle="fullScreen" id="mpH-EV-zMH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8SL-8Y-1xM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -150,7 +151,7 @@
         <!--Navigation Controller-->
         <scene sceneID="pPB-zS-gF1">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LnG-LG-xQa" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="navigationController" automaticallyAdjustsScrollViewInsets="NO" id="LnG-LG-xQa" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="PSu-S4-gul">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>

@@ -7,6 +7,7 @@
 
 import UIKit
 import MapKit
+import ParseCore
 
 class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MKMapViewDelegate {
 
@@ -24,7 +25,8 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         imageView.addGestureRecognizer(gestureRecognizer)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation))
         mapkit.addGestureRecognizer(longPressRecognizer)
-    }
+        
+    }    
 
     func startMapkit() {
         let location = CLLocation(latitude: 41.042058, longitude: 28.996780)
@@ -44,7 +46,7 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
 
     }
 
-    @objc func addAnnotation(gestureRecognizer: UILongPressGestureRecognizer,title : String) {
+    @objc func addAnnotation(gestureRecognizer: UILongPressGestureRecognizer, title: String) {
 
         if gestureRecognizer.state == .began {
             // Uzun basma başladığında yapılacak işlemler
