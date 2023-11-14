@@ -24,7 +24,7 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         super.viewDidLoad()
 
         imageView.isUserInteractionEnabled = true
-        //startMapkit()
+        startMapkit()
         mapkit.delegate = self
 
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseImage))
@@ -39,12 +39,13 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 7000, longitudinalMeters: 7000)
 
         // annotation
+        /*
         let annotation = MKPointAnnotation()
         annotation.coordinate = location.coordinate
         annotation.title = "Taksim"
         annotation.subtitle = "Istanbul"
         mapkit.addAnnotation(annotation)
-
+*/
 
         mapkit.setRegion(coordinateRegion, animated: true)
 

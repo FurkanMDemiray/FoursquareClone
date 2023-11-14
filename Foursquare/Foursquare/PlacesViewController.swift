@@ -11,6 +11,12 @@ import ParseCore
 class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tableView: UITableView!
+
+    var nameArray = [String]()
+    var latitudeArray = [Double]()
+    var longitudeArray = [Double]()
+    var imageArray = [UIImage]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -53,6 +59,54 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         alertController.addAction(okButton)
         self.present(alertController, animated: true, completion: nil)
 
+    }
+
+
+    func getDate() {
+
+
+        let query = PFQuery(className: "places")
+        query.findObjectsInBackground { objects, error in
+            if let err = error {
+                self.makeAlert(title: "Error", message: err.localizedDescription)
+            } else {
+                if objects != nil {
+
+                    self.nameArray.removeAll(keepingCapacity: false)
+                    self.imageArray.removeAll(keepingCapacity: false)
+                    self.latitudeArray.removeAll(keepingCapacity: false)
+                    self.longitudeArray.removeAll(keepingCapacity: false)
+
+                    for object in objects! {
+                        if let placeName = object.object(forKey: "name") as? String {
+                            if let placeLatitude = object.object(forKey: "latitude") as? String {
+                                if let placeLongitude = object.object(forKey: "longitude") as? String {
+                                    if let imageData = object.object(forKey: "image") as? PFFileObject {
+
+                                        imageData.getDataInBackground { data, error in
+                                            if error == nil {
+                                                if data != nil {
+                                                    let image = UIImage(data: data!)
+                                                    self.imageArray.append(image!)
+                                                    self.nameArray.append(placeName)
+                                                    self.latitudeArray.append(Double(placeLatitude)!)
+                                                    self.longitudeArray.append(Double(placeLongitude)!)
+
+                                                    self.tableView.reloadData()
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+
+                }
+            }
+        }
     }
 
 }

@@ -17,6 +17,7 @@
 		DDF194C22B01110300E7A3F3 /* ParseUI in Frameworks */ = {isa = PBXBuildFile; productRef = DDF194C12B01110300E7A3F3 /* ParseUI */; };
 		DDF194C42B0279F300E7A3F3 /* PlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF194C32B0279F300E7A3F3 /* PlacesViewController.swift */; };
 		DDF194C62B027C4500E7A3F3 /* AddPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF194C52B027C4500E7A3F3 /* AddPlaceViewController.swift */; };
+		DDF194CA2B04068E00E7A3F3 /* PlacesClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF194C92B04068E00E7A3F3 /* PlacesClass.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		DDF194B02B01101900E7A3F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDF194C32B0279F300E7A3F3 /* PlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesViewController.swift; sourceTree = "<group>"; };
 		DDF194C52B027C4500E7A3F3 /* AddPlaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaceViewController.swift; sourceTree = "<group>"; };
+		DDF194C92B04068E00E7A3F3 /* PlacesClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesClass.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				DDF194AD2B01101900E7A3F3 /* LaunchScreen.storyboard */,
 				DDF194B02B01101900E7A3F3 /* Info.plist */,
 				DDF194C52B027C4500E7A3F3 /* AddPlaceViewController.swift */,
+				DDF194C92B04068E00E7A3F3 /* PlacesClass.swift */,
 			);
 			path = Foursquare;
 			sourceTree = "<group>";
@@ -157,6 +160,7 @@
 			files = (
 				DDF194C62B027C4500E7A3F3 /* AddPlaceViewController.swift in Sources */,
 				DDF194C42B0279F300E7A3F3 /* PlacesViewController.swift in Sources */,
+				DDF194CA2B04068E00E7A3F3 /* PlacesClass.swift in Sources */,
 				DDF194A72B01101800E7A3F3 /* ViewController.swift in Sources */,
 				DDF194A32B01101800E7A3F3 /* AppDelegate.swift in Sources */,
 				DDF194A52B01101800E7A3F3 /* SceneDelegate.swift in Sources */,
