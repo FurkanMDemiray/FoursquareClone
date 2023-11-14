@@ -13,6 +13,9 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var mapkit: MKMapView!
+    @IBOutlet weak var placeNameText: UITextField!
+
+    var isAdded = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +28,8 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         imageView.addGestureRecognizer(gestureRecognizer)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation))
         mapkit.addGestureRecognizer(longPressRecognizer)
-        
-    }    
+
+    }
 
     func startMapkit() {
         let location = CLLocation(latitude: 41.042058, longitude: 28.996780)
@@ -42,28 +45,41 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
 
         mapkit.setRegion(coordinateRegion, animated: true)
 
-        // Harita görünümü delegesini ayarla
-
     }
 
-    @objc func addAnnotation(gestureRecognizer: UILongPressGestureRecognizer, title: String) {
+    @objc func addAnnotation(gestureRecognizer: UILongPressGestureRecognizer) {
 
-        if gestureRecognizer.state == .began {
-            // Uzun basma başladığında yapılacak işlemler
-            let touchPoint = gestureRecognizer.location(in: mapkit)
-            let coordinate = mapkit.convert(touchPoint, toCoordinateFrom: mapkit)
+        if placeNameText.text != "" && isAdded == false {
+            if gestureRecognizer.state == .began {
+                // Uzun basma başladığında yapılacak işlemler
+                let touchPoint = gestureRecognizer.location(in: mapkit)
+                let coordinate = mapkit.convert(touchPoint, toCoordinateFrom: mapkit)
 
-            // Yeni bir annotation oluştur
-            let newAnnotation = MKPointAnnotation()
-            newAnnotation.coordinate = coordinate
-            newAnnotation.title = title
-            newAnnotation.subtitle = "Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)"
+                // Yeni bir annotation oluştur
+                let newAnnotation = MKPointAnnotation()
+                newAnnotation.coordinate = coordinate
+                newAnnotation.title = placeNameText.text
+                newAnnotation.subtitle = "Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)"
 
-            // Harita üzerine yeni annotation'ı ekle
-            mapkit.addAnnotation(newAnnotation)
+                // Harita üzerine yeni annotation'ı ekle
+                mapkit.addAnnotation(newAnnotation)
+                isAdded = true
+            }
+        } else if placeNameText.text == "" {
+            makeAlert(title: "Error", message: "Please enter a place name")
         }
+        else if isAdded == true {
+            makeAlert(title: "Error", message: "You have already added a place")
+        }
+
     }
 
+    func makeAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
+        let okButton = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alert.addAction(okButton)
+        self.present(alert, animated: true, completion: nil)
+    }
 
     @objc func chooseImage() {
 
@@ -72,6 +88,11 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         picker.sourceType = .photoLibrary
         present(picker, animated: true)
 
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+
+        imageView.image = info[.originalImage] as? UIImage
+        self.dismiss(animated: true, completion: nil)
     }
 
 
