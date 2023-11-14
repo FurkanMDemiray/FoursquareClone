@@ -15,13 +15,16 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var mapkit: MKMapView!
     @IBOutlet weak var placeNameText: UITextField!
 
+    var chosenLatitude = Double()
+    var chosenLongitude = Double()
+
     var isAdded = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         imageView.isUserInteractionEnabled = true
-        startMapkit()
+        //startMapkit()
         mapkit.delegate = self
 
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseImage))
@@ -60,6 +63,8 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
                 newAnnotation.coordinate = coordinate
                 newAnnotation.title = placeNameText.text
                 newAnnotation.subtitle = "Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)"
+                chosenLatitude = coordinate.latitude
+                chosenLongitude = coordinate.longitude
 
                 // Harita üzerine yeni annotation'ı ekle
                 mapkit.addAnnotation(newAnnotation)
@@ -97,5 +102,24 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
 
 
     @IBAction func saveButtonClicked(_ sender: Any) {
+
+        let place = PFObject(className: "places")
+
+        place["name"] = placeNameText.text
+        place["latitude"] = chosenLatitude
+        place["longitude"] = chosenLongitude
+        place["image"] = imageView.image?.jpegData(compressionQuality: 0.5)
+
+        place.saveInBackground { success, error in
+            if let err = error {
+                self.makeAlert(title: "Error", message: err.localizedDescription)
+            }
+            else {
+                self.makeAlert(title: "Success", message: "Place saved")
+                self.placeNameText.text = ""
+                //self.imageView.image = UIImage(named: "select.png")
+                self.isAdded = false
+            }
+        }
     }
 }
