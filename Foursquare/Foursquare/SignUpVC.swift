@@ -8,7 +8,8 @@
 import UIKit
 import ParseCore
 
-class ViewController: UIViewController {
+class SignUpVC: UIViewController {
+
     @IBOutlet weak var passwordTxt: UITextField!
     @IBOutlet weak var userNameTxt: UITextField!
 
@@ -17,10 +18,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-
     }
-    
+
 
     @IBAction func signInButton(_ sender: Any) {
 

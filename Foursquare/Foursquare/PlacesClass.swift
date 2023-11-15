@@ -19,6 +19,7 @@ class PlacesModel {
     var latitude = ""
     var longitude = ""
     var placeID = ""
+    var isTableViewClicked = false
 
     static var sharedInstance = PlacesModel()
 

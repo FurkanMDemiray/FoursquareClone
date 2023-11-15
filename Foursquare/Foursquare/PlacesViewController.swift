@@ -30,7 +30,9 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         print(nameArray)
     }
 
-
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(PlacesViewController.getData), name: NSNotification.Name(rawValue: "newPlace"), object: nil)
+    }
     @objc func logOutClicked() {
         PFUser.logOutInBackground { (error) in
             if error != nil {
@@ -42,6 +44,8 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     @objc func addButtonClicked() {
+        PlacesModel.sharedInstance.image = UIImage(named: "select.png")!
+        PlacesModel.sharedInstance.isTableViewClicked = false
         performSegue(withIdentifier: "toAddPlaceVC", sender: nil)
     }
 
@@ -58,11 +62,12 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+
         PlacesModel.sharedInstance.name = nameArray[indexPath.row]
         PlacesModel.sharedInstance.latitude = String(latitudeArray[indexPath.row])
         PlacesModel.sharedInstance.longitude = String(longitudeArray[indexPath.row])
         PlacesModel.sharedInstance.image = imageArray[indexPath.row]
+        PlacesModel.sharedInstance.isTableViewClicked = true
         performSegue(withIdentifier: "toAddPlaceVC", sender: nil)
     }
 
@@ -77,7 +82,7 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
 
-    func getData() {
+    @objc func getData() {
 
         let query = PFQuery(className: "places")
         query.findObjectsInBackground { objects, error in

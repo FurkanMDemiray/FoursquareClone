@@ -14,6 +14,7 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var mapkit: MKMapView!
     @IBOutlet weak var placeNameText: UITextField!
+    @IBOutlet weak var saveButton: UIButton!
 
     var chosenLatitude = Double()
     var chosenLongitude = Double()
@@ -29,14 +30,39 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
 
-        imageView.isUserInteractionEnabled = true
+        if PlacesModel.sharedInstance.name != nil && PlacesModel.sharedInstance.isTableViewClicked == true {
+            imageView.image = PlacesModel.sharedInstance.image
+            placeNameText.isHidden = true
+            saveButton.isHidden = true
+            getSelectedLocation()
+            print("İfe girdi")
+        } else if PlacesModel.sharedInstance.isTableViewClicked == false {
+            print("Else girdi")
+            placeNameText.isHidden = false
+            saveButton.isHidden = false
+            imageView.isUserInteractionEnabled = true
+            let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseImage))
+            imageView.addGestureRecognizer(gestureRecognizer)
+            let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation))
+            mapkit.addGestureRecognizer(longPressRecognizer)
+        }
 
-
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseImage))
-        imageView.addGestureRecognizer(gestureRecognizer)
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation))
-        mapkit.addGestureRecognizer(longPressRecognizer)
-
+    }
+    func getSelectedLocation() {
+        if PlacesModel.sharedInstance.latitude != "" {
+            let latitude = Double(PlacesModel.sharedInstance.latitude)
+            let longitude = Double(PlacesModel.sharedInstance.longitude)
+            let location = CLLocationCoordinate2D(latitude: latitude!, longitude: longitude!)
+            let span = MKCoordinateSpan(latitudeDelta: 0.035, longitudeDelta: 0.035)
+            let region = MKCoordinateRegion(center: location, span: span)
+            mapkit.setRegion(region, animated: true)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = location
+            annotation.title = PlacesModel.sharedInstance.name
+            annotation.subtitle = "\(PlacesModel.sharedInstance.longitude),\(PlacesModel.sharedInstance.latitude)"
+            mapkit.addAnnotation(annotation)
+            PlacesModel.sharedInstance.isTableViewClicked = false
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -71,6 +97,8 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         else if isAdded == true {
             makeAlert(title: "Error", message: "You have already added a place")
         }
+
+
 
     }
 
@@ -112,10 +140,14 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
                 self.makeAlert(title: "Error", message: err.localizedDescription)
             }
             else {
-                self.makeAlert(title: "Success", message: "Place saved")
+                //self.makeAlert(title: "Success", message: "Place saved")
                 self.placeNameText.text = ""
                 //self.imageView.image = UIImage(named: "select.png")
                 self.isAdded = false
+                let nc = NotificationCenter.default
+                nc.post(name: Notification.Name("newPlace"), object: nil)
+                // back to the former view controller
+                self.navigationController?.popViewController(animated: true)
             }
         }
     }
