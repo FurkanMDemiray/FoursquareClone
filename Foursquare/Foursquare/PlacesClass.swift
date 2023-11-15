@@ -18,6 +18,7 @@ class PlacesModel {
     var image = UIImage()
     var latitude = ""
     var longitude = ""
+    var placeID = ""
 
     static var sharedInstance = PlacesModel()
 

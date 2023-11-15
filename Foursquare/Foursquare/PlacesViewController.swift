@@ -25,8 +25,12 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonClicked))
         navigationController?.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(title: "Log Out", style: UIBarButtonItem.Style.plain, target: self, action: #selector(logOutClicked))
-
+        getData()
+        print(nameArray.count)
+        print(nameArray)
     }
+
+
     @objc func logOutClicked() {
         PFUser.logOutInBackground { (error) in
             if error != nil {
@@ -42,13 +46,24 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return nameArray.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        cell.textLabel?.text = "Test"
+        cell.textLabel?.text = nameArray[indexPath.row]
+        //cell.imageView?.image = imageArray[indexPath.row]
+
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        PlacesModel.sharedInstance.name = nameArray[indexPath.row]
+        PlacesModel.sharedInstance.latitude = String(latitudeArray[indexPath.row])
+        PlacesModel.sharedInstance.longitude = String(longitudeArray[indexPath.row])
+        PlacesModel.sharedInstance.image = imageArray[indexPath.row]
+        performSegue(withIdentifier: "toAddPlaceVC", sender: nil)
     }
 
     func makeAlert(title: String, message: String) {
@@ -69,37 +84,35 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if let err = error {
                 self.makeAlert(title: "Error", message: err.localizedDescription)
             } else {
-                if objects != nil {
+                if let objects = objects {
 
                     self.nameArray.removeAll(keepingCapacity: false)
-                    self.imageArray.removeAll(keepingCapacity: false)
                     self.latitudeArray.removeAll(keepingCapacity: false)
                     self.longitudeArray.removeAll(keepingCapacity: false)
+                    self.imageArray.removeAll(keepingCapacity: false)
 
-                    for object in objects! {
+                    for object in objects {
+
                         if let placeName = object.object(forKey: "name") as? String {
-                            if let placeLatitude = object.object(forKey: "latitude") as? String {
-                                if let placeLongitude = object.object(forKey: "longitude") as? String {
-                                    if let imageData = object.object(forKey: "image") as? PFFileObject {
-
-                                        imageData.getDataInBackground { data, error in
-                                            if error == nil {
-                                                if data != nil {
-                                                    let image = UIImage(data: data!)
-                                                    self.imageArray.append(image!)
-                                                    self.nameArray.append(placeName)
-                                                    self.latitudeArray.append(Double(placeLatitude)!)
-                                                    self.longitudeArray.append(Double(placeLongitude)!)
-
-                                                    self.tableView.reloadData()
-                                                }
-                                            }
-                                        }
+                            self.nameArray.append(placeName)
+                        }
+                        if let placeLatitude = object.object(forKey: "latitude") as? Double {
+                            self.latitudeArray.append(placeLatitude)
+                        }
+                        if let placeLongitude = object.object(forKey: "longitude") as? Double {
+                            self.longitudeArray.append(placeLongitude)
+                        }
+                        if let placeImage = object.object(forKey: "image2") as? PFFileObject {
+                            placeImage.getDataInBackground { data, error in
+                                if let imageData = data {
+                                    if let image = UIImage(data: imageData) {
+                                        self.imageArray.append(image)
                                     }
                                 }
                             }
                         }
                     }
+                    self.tableView.reloadData()
                 }
             }
         }

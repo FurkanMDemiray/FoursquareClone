@@ -12,45 +12,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var passwordTxt: UITextField!
     @IBOutlet weak var userNameTxt: UITextField!
 
+    var nameArray = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
 
-        /*
-        let parseObject = PFObject(className: "Fruits")
-        parseObject["name"] = "Apple"
-        parseObject["calories"] = 300
-        parseObject.saveInBackground { success, error in
-
-            if let err = error {
-
-                self.makeAlert(title: "Error", message: err.localizedDescription)
-            }
-            else {
-
-                self.makeAlert(title: "Success", message: "Saved")
-            }
-
-        }
-         */
-
-        let query = PFQuery(className: "Fruits")
-
-        query.findObjectsInBackground { objects, error in
-            if let err = error {
-
-                self.makeAlert(title: "Error", message: err.localizedDescription)
-            } else {
-                if let obj = objects {
-                    print(obj)
-                }
-            }
-        }
-
+        
 
     }
-
+    
 
     @IBAction func signInButton(_ sender: Any) {
 

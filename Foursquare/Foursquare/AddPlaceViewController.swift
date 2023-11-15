@@ -103,7 +103,9 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
         place["name"] = placeNameText.text
         place["latitude"] = chosenLatitude
         place["longitude"] = chosenLongitude
-        place["image"] = imageView.image?.jpegData(compressionQuality: 0.5)
+        if let imageData = imageView.image?.jpegData(compressionQuality: 0.5) {
+            place["image2"] = PFFileObject(name: "image.jpg", data: imageData)
+        }
 
         place.saveInBackground { success, error in
             if let err = error {
