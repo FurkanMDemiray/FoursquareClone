@@ -62,8 +62,7 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
 
-    func getDate() {
-
+    func getData() {
 
         let query = PFQuery(className: "places")
         query.findObjectsInBackground { objects, error in
@@ -101,9 +100,6 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             }
                         }
                     }
-
-
-
                 }
             }
         }

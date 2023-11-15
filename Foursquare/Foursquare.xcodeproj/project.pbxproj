@@ -70,12 +70,12 @@
 				DDF194A22B01101800E7A3F3 /* AppDelegate.swift */,
 				DDF194A42B01101800E7A3F3 /* SceneDelegate.swift */,
 				DDF194A62B01101800E7A3F3 /* ViewController.swift */,
+				DDF194C52B027C4500E7A3F3 /* AddPlaceViewController.swift */,
+				DDF194C92B04068E00E7A3F3 /* PlacesClass.swift */,
 				DDF194A82B01101800E7A3F3 /* Main.storyboard */,
 				DDF194AB2B01101900E7A3F3 /* Assets.xcassets */,
 				DDF194AD2B01101900E7A3F3 /* LaunchScreen.storyboard */,
 				DDF194B02B01101900E7A3F3 /* Info.plist */,
-				DDF194C52B027C4500E7A3F3 /* AddPlaceViewController.swift */,
-				DDF194C92B04068E00E7A3F3 /* PlacesClass.swift */,
 			);
 			path = Foursquare;
 			sourceTree = "<group>";

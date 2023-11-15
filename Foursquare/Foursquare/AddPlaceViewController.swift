@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 import ParseCore
 
-class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MKMapViewDelegate {
+class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, MKMapViewDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var mapkit: MKMapView!
@@ -17,15 +17,20 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
 
     var chosenLatitude = Double()
     var chosenLongitude = Double()
-
     var isAdded = false
+    var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        imageView.isUserInteractionEnabled = true
-        startMapkit()
         mapkit.delegate = self
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+
+        imageView.isUserInteractionEnabled = true
+
 
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(chooseImage))
         imageView.addGestureRecognizer(gestureRecognizer)
@@ -34,23 +39,12 @@ class AddPlaceViewController: UIViewController, UIImagePickerControllerDelegate,
 
     }
 
-    func startMapkit() {
-        let location = CLLocation(latitude: 41.042058, longitude: 28.996780)
-        let coordinateRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 7000, longitudinalMeters: 7000)
-
-        // annotation
-        /*
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = location.coordinate
-        annotation.title = "Taksim"
-        annotation.subtitle = "Istanbul"
-        mapkit.addAnnotation(annotation)
-*/
-
-        mapkit.setRegion(coordinateRegion, animated: true)
-
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
+        let span = MKCoordinateSpan(latitudeDelta: 0.035, longitudeDelta: 0.035)
+        let region = MKCoordinateRegion(center: location, span: span)
+        mapkit.setRegion(region, animated: true)
     }
-
     @objc func addAnnotation(gestureRecognizer: UILongPressGestureRecognizer) {
 
         if placeNameText.text != "" && isAdded == false {
